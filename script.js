@@ -8,13 +8,8 @@
   // function? How can DOM traversal be used to get the "hour-x" id of the
   // time-block containing the button that was clicked? How might the id be
   // useful when saving the description in local storage?
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
+
+
   // TODO: Add code to get any user input that was saved in localStorage and set
   // the values of the corresponding textarea elements. HINT: How can the id
   // attribute of each time-block be used to do this?
@@ -22,15 +17,22 @@
   // TODO: Add code to display the current date in the header of the page.
 
 
-
-var currentDay = dayjs();
+// sets current date
+let currentDay = dayjs();
 $('#currentDay').text(currentDay.format('dddd MMM D YYYY'));
 
-var currentTime = dayjs();
+// sets current Time
+let currentTime = dayjs();
 $('#currentTime').text(currentTime.format('HH:mm '));
 
 
-var timeSlots = {
+// sets current hour -- may be used later if not delete
+let currentHour = dayjs().format('HH');
+
+
+
+// obj of time slots with their respective ids and time relate values
+const timeSlots = {
   nine: {
     id:'hour-9',
     value:dayjs().set('hour', 9)
@@ -69,6 +71,17 @@ var timeSlots = {
   },
 }
 
+// variable for save button
+const saveButton = document.getElementsByClassName('btn');
+
+// variable for text area for todos
+const textArea = document.getElementsByClassName('textArea');
+
+// an empty array ill push user input to
+let userInput = [''];
+
+// looping through the timeSlots object and identifying how the value compares to the current time and adding the correct class.
+// need to go in and get "present time" class working. currently its only displaying past and future
 for (let key in timeSlots){
   if(timeSlots.hasOwnProperty(key)){
     const $element = $(`#${timeSlots[key].id}`);
@@ -87,21 +100,25 @@ for (let key in timeSlots){
 }
 
 
-
-// when the user loads the page past present and future are color coded
-// each time slot needs to represent an actual time (can i do this based on their id?)
-// the function needs to iterate over each time slot to determine if the time is less than greater than or equal to the current time
-// if the time is less than the current time they will be given future class
-// if greater than they will be given the past class
-// otherwise they will be given the pesent class
-// i need to make the time slot ids = an actual time 
+// when the user types a todo they can click the save button that is next to that time div. this will save the to do in local storage so that
+// if they refresh the page, it reloads when they come back
+// we need an event listener for the save button, a variable for the textarea, a variable for the user input, and a function that saves it to localstrg
+// maybe also an event listener to capture user input
 
 
 
+function saveInput(){
+  for (let i=0; i < saveButton.length; i++){
+    saveButton[i].addEventListener('click', saveInput); {
+    let input =(textArea[i].value);
+    localStorage.setItem("input", input);
+    localStorage.getItem('input', input);
 
-// idk what to do to assign a time value to each id without creating an individual variable for each
-
-
+    console.log(input)
+    }
+  }
+}
+saveInput()
 
 
 
