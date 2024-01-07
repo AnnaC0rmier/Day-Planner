@@ -13,13 +13,13 @@
   // TODO: Add code to get any user input that was saved in localStorage and set
   // the values of the corresponding textarea elements. HINT: How can the id
   // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
+  
 
 
 // sets current date
 let currentDay = dayjs();
-$('#currentDay').text(currentDay.format('dddd MMM D YYYY'));
+$('#currentDay').text(currentDay.format('dddd MMMM D YY'));
+
 
 // sets current Time
 let currentTime = dayjs();
@@ -71,14 +71,10 @@ const timeSlots = {
   },
 }
 
-// variable for save button
-const saveButton = document.getElementsByClassName('btn');
+// variable for text area for events
+const textArea = document.getElementsByClassName('description');
 
-// variable for text area for todos
-const textArea = document.getElementsByClassName('textArea');
 
-// an empty array ill push user input to
-let userInput = [''];
 
 // looping through the timeSlots object and identifying how the value compares to the current time and adding the correct class.
 // need to go in and get "present time" class working. currently its only displaying past and future
@@ -92,33 +88,45 @@ for (let key in timeSlots){
     else if (currentTime.isAfter(timeSlots[key].value)){
       $element.addClass('past')
     }
-    else (currentTime.isSame(timeSlots[key].value))
+    else if (currentTime.isSame(timeSlots[key].value))
     {
       $element.addClass('present')
     }
   }
 }
 
+  
+// An event listener that saves input to local storage when any save button on the page is clicked
 
-// when the user types a todo they can click the save button that is next to that time div. this will save the to do in local storage so that
-// if they refresh the page, it reloads when they come back
-// we need an event listener for the save button, a variable for the textarea, a variable for the user input, and a function that saves it to localstrg
-// maybe also an event listener to capture user input
+const saveBtn = document.querySelectorAll('.btn');
 
+saveBtn.forEach(function(saveBtn){
+ saveBtn.addEventListener('click', function(){
+   for(let i=0; i < textArea.length; i++){
+     localStorage.setItem('user input' + i, textArea[i].value);
+   }
 
-
-function saveInput(){
-  for (let i=0; i < saveButton.length; i++){
-    saveButton[i].addEventListener('click', saveInput); {
-    let input =(textArea[i].value);
-    localStorage.setItem("input", input);
-    localStorage.getItem('input', input);
-
-    console.log(input)
+   window.addEventListener('load', function () {
+    for (let i = 0; i < textArea.length; i++) {
+      const savedValue = localStorage.getItem('user input' + i);
+      textArea[i].value = savedValue;
     }
-  }
-}
-saveInput()
+  });
+})
+ })
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
