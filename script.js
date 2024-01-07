@@ -5,19 +5,12 @@
   
 // sets current date
 let currentDay = dayjs();
-$('#currentDay').text(currentDay.format('dddd MMMM D YY'));
+$('#currentDay').text(currentDay.format('dddd MMMM D, YY'));
 
 
 // // sets current Time
-// let currentTime = dayjs();
-// $('#currentTime').text(currentTime.format('HH:mm '));
-
-let currentTime= dayjs().set('hour', 11).set('minute', 55).set('second', 15)
-
-
-// sets current hour -- may be used later if not delete
-// let currentHour = dayjs().format('HH');
-
+let currentTime = dayjs();
+$('#currentTime').text(currentTime.format('HH:mm '));
 
 
 // obj of time slots with their respective ids and time relate values
@@ -64,20 +57,23 @@ const timeSlots = {
 const textArea = document.getElementsByClassName('description');
 
 
-// looping through the timeSlots object and identifying how the value compares to the current time and adding the correct class.
+
+// looping through the timeSlots object and identifying how the hour compares to the current hour and adding the correct class.
 for (let key in timeSlots) {
   if (timeSlots.hasOwnProperty(key)) {
     const $element = $(`#${timeSlots[key].id}`);
+    const slotHour = timeSlots[key].value.hour();  // Extract hour component
 
-    if (currentTime.isBefore(timeSlots[key].value)) {
+    if (currentTime.hour() < slotHour) {
       $element.addClass('future');
-    } else if (currentTime.isAfter(timeSlots[key].value)) {
+    } else if (currentTime.hour() > slotHour) {
       $element.addClass('past');
     } else {
       $element.addClass('present');
     }
   }
 }
+
 
 // An event listener that saves input to local storage when any save button on the page is clicked
 const saveBtn = document.querySelectorAll('.btn');
